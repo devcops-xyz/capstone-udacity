@@ -14,7 +14,8 @@ pipeline {
                 sh 'tidy -q -e **/*.html'
                 sh '''docker run --rm -i hadolint/hadolint < Dockerfile'''
                 }
-            }
+            }    
+        }
         stage('Build Image') {
             steps {
                 script {
@@ -37,7 +38,6 @@ pipeline {
                     sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${ClusterName}'
                 }
             }
-        }
         }
         stage('Deploy blue Container')  {
             steps {
