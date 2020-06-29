@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        eksClusterName = 'capstone-cluster'
+        ClusterName = 'capstone-cluster'
         awsRegion = 'us-west-2'
         registry = "udacity1project/capstone"
         registryCredential = 'dockerhub'
@@ -15,14 +15,14 @@ pipeline {
                 sh '''docker run --rm -i hadolint/hadolint < Dockerfile'''
                 }
             }
-        stage('Building Image') {
+        stage('Build Image') {
             steps {
                 script {
                     dockerImage = docker.build registry + ":$version"
                 }
             }
         }
-        stage('Deploying Image to Docker Hub') {
+        stage('Push Image to Docker Hub') {
             steps{
                 script {
                     docker.withRegistry( '', registryCredential ) {
@@ -31,13 +31,35 @@ pipeline {
                 }
             }
         }
-        stage('EKS Deploy')  {
+        stage('Deploy to EKS')  {
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
-                    sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${eksClusterName}'
-                    sh 'kubectl apply -f deploy/capstone-deployment.yml'
-                    sleep 20
-                    sh 'kubectl get service capstone'
+                    sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${ClusterName}'
+                }
+            }
+        }
+        stage('Blue/Green?') {
+            steps {
+                input(message: 'Blue/Green?', id: 'deploy', ok: 'deploy?', parameters: [choice(choices: 'blue\ngreen', description: 'Select an environment', name: 'PROD_ENV')])
+        }
+        }
+        stage('Deploy blue Container')  {
+                        when {expression { deploy == 'blue' }}
+            steps {
+                withAWS(credentials: 'aws-static', region: awsRegion) {
+                    sh 'kubectl apply -f blue-green/deploy-blue.yaml'
+                    sleep 20 //to have time getting service
+                    sh 'kubectl get service capstoneLB'
+                }
+            }
+        }
+        stage('Deploy green Container')  {
+                        when {expression { deploy == 'green' }}
+            steps {
+                withAWS(credentials: 'aws-static', region: awsRegion) {
+                    sh 'kubectl apply -f blue-green/deploy-green.yaml'
+                    sleep 20 //to have time getting service
+                    sh 'kubectl get service capstoneLB'
                 }
             }
         }
