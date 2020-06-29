@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: capstone-deploy
+  name: blue
 spec:
   selector:
     matchLabels:
-      app: capstone
-  replicas: 3
+      app: blue
+  replicas: 1
   template:
     metadata:
       labels:
-        app: capstone
+        app: blue
     spec:
       containers:
       - name: capstone-pod
@@ -25,16 +25,3 @@ spec:
       maxUnavailable: 1
       maxSurge: 1
   minReadySeconds: 10
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: capstone
-spec:
-  type: LoadBalancer
-  selector:
-    app: capstone
-  ports:
-  - port: 80
-    targetPort: 80
