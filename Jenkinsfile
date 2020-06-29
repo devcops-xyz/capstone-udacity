@@ -12,13 +12,13 @@ pipeline {
             steps {
                 sh 'tidy -q -e **/*.html'
                 sh '''docker run --rm -i hadolint/hadolint < Dockerfile'''
+                }
             }
         }
         stage('Building Image') {
             steps {
                 script {
                     dockerImage = docker.build registry + ":$version"
-                    }
                 }
             }
         }
@@ -27,11 +27,11 @@ pipeline {
                 script {
                     docker.withRegistry( '', dockerhub ) {
                     dockerImage.push()
-                 }
+                    }
                 }
-              }
             }
-        stage('K8S Deploy')  {
+        }
+        stage('EKS Deploy')  {
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${eksClusterName}'
@@ -40,4 +40,4 @@ pipeline {
                 }
             }
         }
-    }
+}
