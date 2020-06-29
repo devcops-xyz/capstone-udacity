@@ -14,7 +14,7 @@
             "ParameterValue": "192.168.1.0/25"
         },
         {
-            "ParameterKey": "Subnet1CIDR2",
+            "ParameterKey": "Subnet2CIDR",
             "ParameterValue": "192.168.1.128/25"
         },
         {
