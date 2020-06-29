@@ -14,7 +14,7 @@
             "ParameterValue": "192.168.1.0/25"
         },
         {
-            "ParameterKey": "Subnet1CID2",
+            "ParameterKey": "Subnet1CIDR2",
             "ParameterValue": "192.168.1.128/25"
         },
         {
@@ -22,7 +22,7 @@
             "ParameterValue": "t3.medium"
         },
         {
-            "ParameterKey": "Keyname",
+            "ParameterKey": "KeyName",
             "ParameterValue": "capstone"
         }
     ]
