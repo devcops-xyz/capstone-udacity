@@ -5,6 +5,7 @@ pipeline {
         registry = "udacity1project/capstone"
         registryCredential = 'dockerhub'
         version = 'latest'
+        imageName = "capstone"
     }
     agent any
         stages {
@@ -19,6 +20,11 @@ pipeline {
                 script {
                     dockerImage = docker.build registry + ":$version"
                 }
+            }
+        }
+        stage('Container Scan') {
+            steps{
+                aquaMicroscanner imageName: '', notCompliesCmd: 'exit 1', onDisallowed: 'fail'
             }
         }
         stage('Deploying Image to Docker Hub') {
