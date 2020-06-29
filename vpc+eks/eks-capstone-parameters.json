@@ -1,0 +1,29 @@
+{
+    "StackName": "eks-vpc",
+    "Parameters": [
+        {
+            "ParameterKey": "EnvironmentName",
+            "ParameterValue": "Development"
+        },
+        {
+            "ParameterKey": "VPCCIDR",
+            "ParameterValue": "192.168.1.0/24"
+        },
+        {
+            "ParameterKey": "Subnet1CIDR",
+            "ParameterValue": "192.168.1.0/25"
+        },
+        {
+            "ParameterKey": "Subnet1CID2",
+            "ParameterValue": "192.168.1.128/25"
+        },
+        {
+            "ParameterKey": "NodeInstanceType",
+            "ParameterValue": "t3.medium"
+        },
+        {
+            "ParameterKey": "Keyname",
+            "ParameterValue": "capstone"
+        }
+    ]
+}
