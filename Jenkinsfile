@@ -59,7 +59,7 @@ pipeline {
 				withAWS(credentials: 'aws-static', region: awsRegion) {
 					sh 'kubectl apply -f blue-green/blue-service.yaml'
                     sleep 10 //to have time getting service
-                    sh 'kubectl get service lbalancer'
+                    sh 'kubectl get service capstone'
 				}
 			}
 		}
@@ -75,7 +75,7 @@ pipeline {
 				withAWS(credentials: 'aws-static', region: awsRegion) {
 					sh 'kubectl apply -f blue-green/green-service.yaml'
                     sleep 10 //to have time getting service
-                    sh 'kubectl get service lbalancer'
+                    sh 'kubectl get service capstone'
 				}
 			}
 		}
