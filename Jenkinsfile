@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Container Scan') {
             steps{
-                aquaMicroscanner imageName: '', notCompliesCmd: 'exit 1', onDisallowed: 'fail'
+                aquaMicroscanner imageName: 'imageName:$version', notCompliesCmd: 'exit 1', onDisallowed: 'fail'
             }
         }
         stage('Deploying Image to Docker Hub') {
