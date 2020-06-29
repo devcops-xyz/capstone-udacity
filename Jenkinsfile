@@ -1,3 +1,4 @@
+List<String> CHOICES = [];
 pipeline {
     environment {
         ClusterName = 'capstone-cluster'
@@ -40,11 +41,15 @@ pipeline {
         }
         stage('Blue/Green?') {
             steps {
-                input(message: 'Blue/Green?', id: 'deploy', ok: 'deploy?', parameters: [choice(choices: 'blue\ngreen', description: 'Select an environment', name: 'PROD_ENV')])
+                        script {
+                        CHOICES = ["blue", "green"];    
+                        env.YourTag = input  message: 'What would you like to deploy?',ok : 'Deploy',id :'color',
+                                        parameters:[choice(choices: CHOICES, description: 'Select a color for this build', name: 'CHOICES')]
+                        }
         }
         }
         stage('Deploy blue Container')  {
-                        when {expression { deploy == 'blue' }}
+                        when {expression { CHOICES == 'blue' }}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-blue.yaml'
@@ -54,7 +59,7 @@ pipeline {
             }
         }
         stage('Deploy green Container')  {
-                        when {expression { deploy == 'green' }}
+                        when {expression { CHOICES == 'green' }}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-green.yaml'
