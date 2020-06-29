@@ -40,7 +40,6 @@ pipeline {
         }
         }
         stage('Deploy blue Container')  {
-                        when {expression { CHOICES == 'blue' }}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-blue.yaml'
@@ -50,7 +49,6 @@ pipeline {
             }
         }
         stage('Deploy green Container')  {
-                        when {expression { CHOICES == 'green' }}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-green.yaml'
@@ -59,5 +57,4 @@ pipeline {
                 }
             }
         }
-    }
 }
