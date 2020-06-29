@@ -8,6 +8,13 @@ pipeline {
         imageName = "capstone"
     }
     agent any
+    stage('Create EKS')  {
+            steps {
+                withAWS(credentials: 'aws-static', region: awsRegion) {
+                    sh 'eksctl create cluster --name myeks --nodes 2'
+                }
+            }
+        }
     stages {
         stage('Lint') {
             steps {
@@ -35,7 +42,7 @@ pipeline {
         stage('Deploy to EKS')  {
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
-                    sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${ClusterName}'
+                    sh 'aws eks update-kubeconfig --name ${ClusterName}'
                     sh 'kubectl config use-context arn:aws:eks:us-west-2:543805437419:cluster/${ClusterName}'
                 }
             }
@@ -57,6 +64,7 @@ pipeline {
 		stage('Create the blue service') {
 			steps {
 				withAWS(credentials: 'aws-static', region: awsRegion) {
+					sh 'kubectl apply -f blue-green/blue-service.yaml'
                     sleep 10 //to have time getting service
                     sh 'kubectl get service capstone'
 				}
@@ -72,6 +80,7 @@ pipeline {
 		stage('Create the green service') {
 			steps {
 				withAWS(credentials: 'aws-static', region: awsRegion) {
+					sh 'kubectl apply -f blue-green/green-service.yaml'
                     sleep 10 //to have time getting service
                     sh 'kubectl get service capstone'
 				}
