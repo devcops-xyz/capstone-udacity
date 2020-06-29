@@ -1,4 +1,3 @@
-List<String> CHOICES = [];
 pipeline {
     environment {
         ClusterName = 'capstone-cluster'
@@ -38,14 +37,6 @@ pipeline {
                     sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${ClusterName}'
                 }
             }
-        }
-        stage('Blue/Green?') {
-            steps {
-                        script {
-                        CHOICES = ["blue", "green"];    
-                        env.YourTag = input  message: 'What would you like to deploy?',ok : 'Deploy',id :'color',
-                                        parameters:[choice(choices: CHOICES, description: 'Select a color for this build', name: 'CHOICES')]
-                        }
         }
         }
         stage('Deploy blue Container')  {
