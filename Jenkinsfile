@@ -36,6 +36,7 @@ pipeline {
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${ClusterName}'
+                    sh 'kubectl config use-context arn:aws:eks:us-west-2:543805437419:cluster/${ClusterName}'
                 }
             }
         }
@@ -43,8 +44,6 @@ pipeline {
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-blue.yaml'
-                    sleep 20 //to have time getting service
-                    sh 'kubectl get service capstone'
                 }
             }
         }
@@ -52,10 +51,34 @@ pipeline {
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-green.yaml'
-                    sleep 20 //to have time getting service
-                    sh 'kubectl get service capstone'
                 }
             }
         }
+		stage('Create the blue service') {
+			steps {
+				withAWS(credentials: 'aws-static', region: awsRegion) {
+					sh 'kubectl apply -f ./blue-service.json'
+                    sleep 10 //to have time getting service
+                    sh 'kubectl get service lbalancer'
+				}
+			}
+		}
+
+		stage('User approval to deploy the green service') {
+            steps {
+                input "Reirect service to green?"
+            }
+        }
+
+		stage('Create the green service') {
+			steps {
+				withAWS(credentials: 'aws-static', region: awsRegion) {
+					sh 'kubectl apply -f ./green-service.json'
+                    sleep 10 //to have time getting service
+                    sh 'kubectl get service lbalancer'
+				}
+			}
+		}
+
     }
 }
