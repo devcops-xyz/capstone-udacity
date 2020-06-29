@@ -57,7 +57,7 @@ pipeline {
 		stage('Create the blue service') {
 			steps {
 				withAWS(credentials: 'aws-static', region: awsRegion) {
-					sh 'kubectl apply -f ./blue-service.json'
+					sh 'kubectl apply -f blue-green/blue-service.yaml'
                     sleep 10 //to have time getting service
                     sh 'kubectl get service lbalancer'
 				}
@@ -73,7 +73,7 @@ pipeline {
 		stage('Create the green service') {
 			steps {
 				withAWS(credentials: 'aws-static', region: awsRegion) {
-					sh 'kubectl apply -f ./green-service.json'
+					sh 'kubectl apply -f blue-green/green-service.yaml'
                     sleep 10 //to have time getting service
                     sh 'kubectl get service lbalancer'
 				}
