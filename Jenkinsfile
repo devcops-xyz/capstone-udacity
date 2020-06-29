@@ -35,6 +35,7 @@ pipeline {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'aws eks --region=${awsRegion} update-kubeconfig --name ${eksClusterName}'
                     sh 'kubectl apply -f deploy/capstone-deployment.yml'
+                    sleep 20
                     sh 'kubectl get service capstone'
                 }
             }
