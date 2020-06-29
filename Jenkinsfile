@@ -44,7 +44,7 @@ pipeline {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-blue.yaml'
                     sleep 20 //to have time getting service
-                    sh 'kubectl get service capstoneLB'
+                    sh 'kubectl get service capstone'
                 }
             }
         }
@@ -53,7 +53,7 @@ pipeline {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'kubectl apply -f blue-green/deploy-green.yaml'
                     sleep 20 //to have time getting service
-                    sh 'kubectl get service capstoneLB'
+                    sh 'kubectl get service capstone'
                 }
             }
         }
