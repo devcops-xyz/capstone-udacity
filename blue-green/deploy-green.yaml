@@ -1,39 +1,21 @@
-apiVersion: apps/v1
-kind: Deployment
+kind: ReplicationController
+apiVersion: v1
 metadata:
   name: green
+  labels:
+    app: green
 spec:
-  selector:
-    matchLabels:
-      app: green
   replicas: 1
+  selector:
+    app: green
   template:
     metadata:
       labels:
         app: green
     spec:
       containers:
-      - name: capstone-pod
-        image: udacity1project/capstone:latest
-        imagePullPolicy: Always
+      - name: green
+        image: udacity1project/capstone
         ports:
-        - containerPort: 80
-          protocol: TCP
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
-  minReadySeconds: 10
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: capstone
-spec:
-  type: LoadBalancer
-  selector:
-    app: green
-  ports:
-  - port: 80
-    targetPort: 80
+        - name: http-server
+          containerPort: 80
