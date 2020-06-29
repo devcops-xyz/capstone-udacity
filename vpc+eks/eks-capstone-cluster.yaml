@@ -66,6 +66,7 @@ Resources:
         Properties:
             VpcId: !Ref VPC
             CidrBlock: !Ref Subnet1CIDR
+            MapPublicIpOnLaunch: true
             AvailabilityZone: !Select [ 0, !GetAZs '' ]
             Tags:
             -   Key: Name
@@ -76,10 +77,39 @@ Resources:
         Properties:
             VpcId: !Ref VPC
             CidrBlock: !Ref Subnet2CIDR
+            MapPublicIpOnLaunch: true
             AvailabilityZone: !Select [ 1, !GetAZs '' ]
             Tags:
             -   Key: Name
                 Value: !Sub "${EnvironmentName}-Subnet2"
+
+    NatGateway01:
+        Type: AWS::EC2::NatGateway
+        Properties:
+            AllocationId: !GetAtt 'NatGatewayEIP1.AllocationId'
+            SubnetId: !Ref Subnet1
+            Tags:
+            -   Key: Name
+                Value: !Sub '${EnvironmentName}-NatGatewayAZ1'
+    
+    NatGateway02:
+        Type: AWS::EC2::NatGateway
+        Properties:
+            AllocationId: !GetAtt 'NatGatewayEIP2.AllocationId'
+            SubnetId: !Ref Subnet2
+            Tags:
+            -   Key: Name
+                Value: !Sub '${EnvironmentName}-NatGatewayAZ2'
+
+    NatGatewayEIP1:
+        Type: 'AWS::EC2::EIP'
+        Properties:
+            Domain: vpc
+
+    NatGatewayEIP2:
+        Type: 'AWS::EC2::EIP'
+        Properties:
+            Domain: vpc
 
     Subnet1RouteTableAssociation:
         Type: AWS::EC2::SubnetRouteTableAssociation
