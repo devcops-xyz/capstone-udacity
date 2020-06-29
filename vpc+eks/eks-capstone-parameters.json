@@ -3,7 +3,7 @@
     "Parameters": [
         {
             "ParameterKey": "EnvironmentName",
-            "ParameterValue": "Development"
+            "ParameterValue": "capstone"
         },
         {
             "ParameterKey": "VPCCIDR",
