@@ -10,7 +10,7 @@ pipeline {
     agent any
     stages {
         stage('Create EKS')  {
-            //when {branch 'test'}
+            when {branch 'test'}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'eksctl create cluster --name myeks --nodes 2'
