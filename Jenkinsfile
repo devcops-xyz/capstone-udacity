@@ -44,7 +44,7 @@ pipeline {
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'aws eks update-kubeconfig --name ${ClusterName}'
-                    sh 'kubectl config use-context arn:aws:eks:us-west-2:543805437419:cluster/${ClusterName}'
+                    sh 'sudo kubectl config use-context arn:aws:eks:us-west-2:543805437419:cluster/${ClusterName}'
                 }
             }
         }
