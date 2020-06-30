@@ -7,4 +7,4 @@ Jenkins Pipeline to:
 * Create blue / green Service to EKS
 
 
-An EC2 instance was used to adminstrate Jenkins, Kubectl and Docker with IAM Administrator Role attached.
+An EC2 instance was used to administrate Jenkins, Kubectl and Docker with IAM Administrator Role attached.
