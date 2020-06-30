@@ -8,7 +8,8 @@ pipeline {
         imageName = "capstone"
     }
     agent any
-    stage('Create EKS')  {
+    stages {
+        stage('Create EKS')  {
             //when {branch 'test'}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
@@ -16,7 +17,6 @@ pipeline {
                 }
             }
         }
-    stages {
         stage('Lint') {
             steps {
                 sh 'tidy -q -e **/*.html'
