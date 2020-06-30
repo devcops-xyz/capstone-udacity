@@ -13,7 +13,7 @@ pipeline {
             //when {branch 'test'}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
-                    sh 'echo -e "\e[31mPlease wait for about 15 minutes to finish EKS creation\e[0m"'
+                    sh 'echo -e "Please wait for about 15 minutes to finish EKS creation"'
                     sh 'eksctl create cluster --name ${ClusterName} --version 1.13 --nodegroup-name standard-workers --node-type t2.small --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto'
                 }
             }
