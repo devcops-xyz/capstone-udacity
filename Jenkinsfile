@@ -10,7 +10,7 @@ pipeline {
     agent any
     stages {
         stage('Create EKS')  {
-            when {branch 'test'}
+            //when {branch 'test'}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'eksctl create cluster --name capstone --version 1.13 --nodegroup-name standard-workers --node-type t2.small --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto'
