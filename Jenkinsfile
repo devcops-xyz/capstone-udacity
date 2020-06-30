@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        ClusterName = 'capstone'
+        ClusterName = 'capstone-udacity'
         awsRegion = 'us-west-2'
         registry = "udacity1project/capstone"
         registryCredential = 'dockerhub'
@@ -13,7 +13,7 @@ pipeline {
             //when {branch 'test'}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
-                    sh 'eksctl create cluster --name capstone --version 1.13 --nodegroup-name standard-workers --node-type t2.small --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto'
+                    sh 'eksctl create cluster --name ${ClusterName} --version 1.13 --nodegroup-name standard-workers --node-type t2.small --nodes 2 --nodes-min 1 --nodes-max 3 --node-ami auto'
                 }
             }
         }
