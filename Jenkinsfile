@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        ClusterName = 'capstone-cluster'
+        ClusterName = 'myeks'
         awsRegion = 'us-west-2'
         registry = "udacity1project/capstone"
         registryCredential = 'dockerhub'
