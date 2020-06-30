@@ -10,7 +10,7 @@ pipeline {
     agent any
     stages {
         stage('Create EKS')  {
-            when {branch 'test'}
+            //when {branch 'test'}
             steps {
                 withAWS(credentials: 'aws-static', region: awsRegion) {
                     sh 'echo -e "Please wait for about 15 minutes to finish EKS creation"'
