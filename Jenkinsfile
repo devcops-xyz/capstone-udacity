@@ -74,7 +74,7 @@ pipeline {
 
 		stage('User approval to deploy the green service') {
             steps {
-                input "Reirect service to green?"
+                input "Redirect service to green?"
             }
         }
 
